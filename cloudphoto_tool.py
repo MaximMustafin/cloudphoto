@@ -1,7 +1,8 @@
-from app import application
+from app.commands import init_comm
+from app.commands import upload_comm
 import click
 import os
-
+import sys
 
 @click.group()
 def cli():
@@ -10,21 +11,20 @@ def cli():
 
 @cli.command()
 def init():
+    bucket = input('bucket = ')
     aws_access_key_id = input('aws_access_key_id = ')
     aws_secret_access_key = input('aws_secret_access_key = ')
-    bucket = input('bucket = ')
+    
+    status_code = init_comm.do_init(bucket, aws_access_key_id, aws_secret_access_key)
+    sys.exit(status_code)
 
-    click.echo(click.style(f'\naws_access_key_id = {aws_access_key_id}\n' 
-                           f'aws_secret_access_key = {aws_secret_access_key}\n'
-                           f'bucket = {bucket}\n', 
-                           fg='red'), err=True)
-
-
+    
 @cli.command()
 @click.option('--album', required=True, type=str, help='Album\'s name')
 @click.option('--path', type=str, help='Photos directory\'s path', default=os.getcwd())
 def upload(album, path):
-    click.echo(f'ALBUM={album}, PHOTO_DIR={path}')
+    status_code = upload_comm.do_upload(album, path)
+    sys.exit(status_code)
 
 
 @cli.command()
