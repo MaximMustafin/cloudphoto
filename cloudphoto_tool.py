@@ -2,6 +2,7 @@ from app.commands import init_comm
 from app.commands import upload_comm
 from app.commands import download_comm
 from app.commands import list_comm
+from app.commands import delete_comm
 import click
 import os
 import sys
@@ -47,7 +48,8 @@ def list(album):
 @click.option('--album', required=True, type=str, help='Album\'s name')
 @click.option('--photo', type=str, help='Photo\'s name')
 def delete(album, photo):
-    click.echo(f'ALBUM={album}, PHOTO={photo}')
+    status_code = delete_comm.do_delete(album, photo)
+    sys.exit(status_code)
 
 
 @cli.command()
