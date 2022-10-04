@@ -8,6 +8,7 @@ import json
 import io
 import ast
 
+
 def do_upload(album_name, path):
     s3 = utils.get_s3_client()
 
@@ -58,17 +59,14 @@ def do_upload(album_name, path):
                     # split filename on photo name and extension
                     split_tup = os.path.splitext(photo_filename)
 
-                    # get photo name
-                    photo_name = split_tup[0]
-
                     # get extension of photo file
                     photo_extension = split_tup[1]
 
                     # genereate unique key out of photo name
-                    photo_key = utils.get_unique_key(photo_name)
+                    photo_key = utils.get_unique_key(photo_filename)
 
-                    # upload photo to bucket under key 'photo/generated_unique_key.jpg
-                    s3.upload_fileobj(photo, bucket, f'photo/{str(photo_key)}.jpg')
+                    # upload photo to bucket under key 'photo/generated_unique_key.extension
+                    s3.upload_fileobj(photo, bucket, f'photo/{str(photo_key)}{photo_extension}')
 
                     click.echo(click.style(f'{file} - uploaded', fg='green'))
                     album_dict['photo'][photo_key] = photo_filename
