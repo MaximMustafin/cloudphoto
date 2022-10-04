@@ -1,5 +1,6 @@
 from app.commands import init_comm
 from app.commands import upload_comm
+from app.commands import download_comm
 import click
 import os
 import sys
@@ -31,7 +32,8 @@ def upload(album, path):
 @click.option('--album', required=True, type=str, help='Album\'s name')
 @click.option('--path', type=str, help='Photos directory\'s path', default=os.getcwd())
 def download(album, path):
-    click.echo(f'ALBUM={album}, PHOTO_DIR={path}')
+    status_code = download_comm.do_download(album, path)
+    sys.exit(status_code)
 
 
 @cli.command()
