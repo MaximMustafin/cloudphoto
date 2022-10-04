@@ -2,9 +2,7 @@ from app import utils
 import click
 import boto3
 from botocore.exceptions import ClientError
-import sys
 import os
-import json
 import io
 import ast
 

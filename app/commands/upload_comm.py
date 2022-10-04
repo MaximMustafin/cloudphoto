@@ -2,7 +2,6 @@ from app import utils
 import click
 import boto3
 from botocore.exceptions import ClientError
-import sys
 import os
 import json
 import io
@@ -36,7 +35,7 @@ def do_upload(album_name, path):
     try:
         files = os.listdir(path)
     except Exception as ex:
-        click.echo(click.style(f'{str(ex)}\n', fg='red'), err=True)
+        click.echo(click.style(f'Dir {path} is not available\n', fg='red'), err=True)
         return 1
 
     files = list(filter(lambda x: x.endswith(('.jpg', '.jpeg')), files))
