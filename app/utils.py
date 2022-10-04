@@ -30,8 +30,10 @@ def get_credentials():
     }
 
 
-def get_s3_client():
+def is_valid_credentials():
     credentials = get_credentials()
+
+    is_valid = False
 
     session = boto3.session.Session()
 
@@ -44,11 +46,44 @@ def get_s3_client():
 
     try:
         s3.head_bucket(Bucket=credentials['bucket'])
-    except ClientError as ex:
+        is_valid = True
+    except Exception as ex:
         click.echo(click.style(f'Wrong credentials!\n', fg='red'), err=True)
+        is_valid = False
+
+    return is_valid
+
+
+def get_s3_client():
+    if is_valid_credentials():
+        credentials = get_credentials()
+
+        session = boto3.session.Session()
+
+        s3 = session.client(
+        service_name ='s3',
+        endpoint_url = credentials['endpoint_url'],
+        aws_access_key_id = credentials['aws_access_key_id'],
+        aws_secret_access_key = credentials['aws_secret_access_key']
+        )
+
+        return s3
+    else:
         sys.exit(1)
 
-    return s3
+
+def get_s3_resource():
+    if is_valid_credentials():
+        credentials = get_credentials()
+
+        s3_resource = boto3.resource('s3', region_name = credentials['region'], 
+                                    endpoint_url=credentials['endpoint_url'],
+                                    aws_access_key_id = credentials['aws_access_key_id'],
+                                    aws_secret_access_key = credentials['aws_secret_access_key'])
+
+        return s3_resource
+    else:
+        sys_exit(1)
 
 
 def get_unique_key(text):
