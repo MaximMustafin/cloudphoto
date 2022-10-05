@@ -46,7 +46,8 @@ def is_valid_credentials():
 
     try:
         s3.head_bucket(Bucket=credentials['bucket'])
-        is_valid = True
+        if credentials['endpoint_url'] == 'https://storage.yandexcloud.net' and credentials['region'] == 'ru-central1':
+            is_valid = True
     except Exception as ex:
         click.echo(click.style(f'Wrong credentials!\n', fg='red'), err=True)
         is_valid = False
@@ -91,8 +92,3 @@ def get_unique_key(text):
     m.update(str(text).encode('utf-8'))
     key = str(int(m.hexdigest(), 16))[0:12]
     return key
-
-    
-
-
-
