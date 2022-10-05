@@ -3,6 +3,7 @@ from app.commands import upload_comm
 from app.commands import download_comm
 from app.commands import list_comm
 from app.commands import delete_comm
+from app.commands import mksite_comm
 import click
 import os
 import sys
@@ -54,4 +55,5 @@ def delete(album, photo):
 
 @cli.command()
 def mksite():
-    click.echo(f'mksite command')
+    status_code = mksite_comm.do_mksite()
+    sys.exit(status_code)
