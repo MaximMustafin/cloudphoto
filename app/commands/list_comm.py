@@ -68,11 +68,5 @@ def do_list(album_name):
         for photo_key in album_dict['photo']:
             print(album_dict['photo'][photo_key])
 
-    
-
-
-
-
-
     click.echo(click.style('\nDone\n', fg='green'))
     return 0
