@@ -37,17 +37,19 @@ def is_valid_credentials():
 
     session = boto3.session.Session()
 
-    s3 = session.client(
-    service_name ='s3',
-    endpoint_url = credentials['endpoint_url'],
-    aws_access_key_id = credentials['aws_access_key_id'],
-    aws_secret_access_key = credentials['aws_secret_access_key']
-    )
-
     try:
+        s3 = session.client(
+        service_name ='s3',
+        endpoint_url = credentials['endpoint_url'],
+        aws_access_key_id = credentials['aws_access_key_id'],
+        aws_secret_access_key = credentials['aws_secret_access_key']
+        )
+
         s3.head_bucket(Bucket=credentials['bucket'])
         if credentials['endpoint_url'] == 'https://storage.yandexcloud.net' and credentials['region'] == 'ru-central1':
             is_valid = True
+        else:
+            raise Exception
     except Exception as ex:
         click.echo(click.style(f'Wrong credentials!\n', fg='red'), err=True)
         is_valid = False
