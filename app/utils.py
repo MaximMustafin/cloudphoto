@@ -21,13 +21,17 @@ def get_credentials():
         click.echo(click.style(f'{str(ex)}\n', fg='red'), err=True)
         sys.exit(1)
 
-    return {
-        'bucket': config.get('DEFAULT', 'bucket'),
-        'aws_access_key_id': config.get('DEFAULT', 'aws_access_key_id'),
-        'aws_secret_access_key': config.get('DEFAULT', 'aws_secret_access_key'),
-        'region': config.get('DEFAULT', 'region'),
-        'endpoint_url': config.get('DEFAULT', 'endpoint_url')
-    }
+    try:
+        return {
+            'bucket': config.get('DEFAULT', 'bucket'),
+            'aws_access_key_id': config.get('DEFAULT', 'aws_access_key_id'),
+            'aws_secret_access_key': config.get('DEFAULT', 'aws_secret_access_key'),
+            'region': config.get('DEFAULT', 'region'),
+            'endpoint_url': config.get('DEFAULT', 'endpoint_url')
+        }
+    except Exception:
+        click.echo(click.style('Wrong credentials!', fg='red'), err=True)
+        sys.exit(1)
 
 
 def is_valid_credentials():
