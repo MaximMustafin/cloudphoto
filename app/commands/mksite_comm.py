@@ -8,7 +8,6 @@ import io
 import ast
 import json
 import bs4
-import requests
 
 
 def do_mksite():
@@ -29,7 +28,10 @@ def do_mksite():
     #         click.echo(click.style(f'{str(ex)}\n', fg='red'), err=True)
     #     return 1
 
-    with open('html/index.html') as index:
+    file_path = os.path.abspath(__file__)
+    dir_path = os.path.dirname(file_path)
+
+    with open(f'{dir_path}/html/index.html') as index:
         index_txt = index.read()
         index_soup = bs4.BeautifulSoup(index_txt, 'html.parser')
 
@@ -63,7 +65,7 @@ def do_mksite():
     
     index_soup.body.append(ul_tag)
 
-    with open('html/album.html') as album_html:
+    with open(f'{dir_path}/html/album.html') as album_html:
         album_html_txt = album_html.read()
         album_soup = bs4.BeautifulSoup(album_html_txt, 'html.parser')
 
@@ -85,7 +87,7 @@ def do_mksite():
         img_tags = bs4.BeautifulSoup('', 'html.parser')
         album_soup = bs4.BeautifulSoup(album_html_txt, 'html.parser')
 
-    with open('html/error.html') as error:
+    with open(f'{dir_path}/html/error.html') as error:
         error_txt = error.read()
         error_soup = bs4.BeautifulSoup(error_txt, 'html.parser')
 
@@ -122,7 +124,10 @@ def do_mksite():
     try:
         s3.put_bucket_website(Bucket=bucket_name,
                       WebsiteConfiguration=website_configuration)
-
+        s3.put_bucket_acl(
+            ACL = 'public-read',
+            Bucket=bucket_name
+        )
     except ClientError as ex:
         click.echo(click.style(f'{str(ex)}\n', fg='red'), err=True)
         return 1 
